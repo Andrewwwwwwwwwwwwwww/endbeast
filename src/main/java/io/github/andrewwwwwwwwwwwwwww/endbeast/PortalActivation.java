@@ -1,10 +1,12 @@
-package com.example.endbeast;
+package io.github.andrewwwwwwwwwwwwwww.endbeast;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -36,6 +38,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class PortalActivation {
+    private static final Logger LOGGER = LoggerFactory.getLogger("EndBeast");
     private static final com.google.gson.Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final long TIMEOUT_TICKS = 20L * 60L;
     private static final double NEARBY_RADIUS = 16.0;
@@ -129,7 +132,7 @@ public class PortalActivation {
             }
             if (json.has("requiredPlayers")) requiredPlayers = Math.max(1, json.get("requiredPlayers").getAsInt());
         } catch (Exception e) {
-            System.err.println("[EndBeast] Failed to load state: " + e.getMessage());
+            LOGGER.error("Failed to load state", e);
         }
     }
 
@@ -170,7 +173,7 @@ public class PortalActivation {
             Files.createDirectories(savePath.getParent());
             Files.writeString(savePath, GSON.toJson(json));
         } catch (Exception e) {
-            System.err.println("[EndBeast] Failed to save state: " + e.getMessage());
+            LOGGER.error("Failed to save state", e);
         }
     }
 

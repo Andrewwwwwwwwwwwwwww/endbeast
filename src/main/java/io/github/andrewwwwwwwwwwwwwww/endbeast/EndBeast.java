@@ -1,4 +1,4 @@
-package com.example.endbeast;
+package io.github.andrewwwwwwwwwwwwwww.endbeast;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ModInitializer;

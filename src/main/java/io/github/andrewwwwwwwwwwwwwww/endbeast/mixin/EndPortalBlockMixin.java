@@ -1,6 +1,6 @@
-package com.example.endbeast.mixin;
+package io.github.andrewwwwwwwwwwwwwww.endbeast.mixin;
 
-import com.example.endbeast.PortalActivation;
+import io.github.andrewwwwwwwwwwwwwww.endbeast.PortalActivation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

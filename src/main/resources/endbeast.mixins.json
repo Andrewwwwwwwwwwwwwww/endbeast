@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.example.endbeast.mixin",
+  "package": "io.github.andrewwwwwwwwwwwwwww.endbeast.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "EndPortalBlockMixin"
