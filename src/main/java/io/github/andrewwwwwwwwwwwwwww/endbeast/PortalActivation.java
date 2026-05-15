@@ -91,6 +91,9 @@ public class PortalActivation {
         lastConsumeTick = 0L;
         lastPortalPos = null;
         requiredPlayers = 3;
+        lastMessageTick.clear();
+        pendingChats.clear();
+        pendingTitles.clear();
         if (!Files.exists(savePath)) return;
         try {
             JsonObject json = JsonParser.parseString(Files.readString(savePath)).getAsJsonObject();

@@ -23,7 +23,7 @@ public class EndBeast implements ModInitializer {
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
             dispatcher.register(
-                Commands.literal("EndBeast")
+                Commands.literal("endbeast")
                     .then(Commands.literal("setendplayercount")
                         .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.argument("count", IntegerArgumentType.integer(1))
