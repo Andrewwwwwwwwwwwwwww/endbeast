@@ -24,10 +24,13 @@ import net.minecraft.world.phys.AABB;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -61,7 +64,10 @@ public class PortalActivation {
     private static int requiredPlayers = 3;
 
     private static final Map<UUID, Long> lastMessageTick = new HashMap<>();
+    private static final List<PendingChat> pendingChats = new ArrayList<>();
     private static Path savePath = null;
+
+    private record PendingChat(UUID playerId, List<Component> messages, long fireTick, boolean broadcast) {}
 
     public static void setRequiredPlayers(int count) {
         requiredPlayers = Math.max(1, count);
@@ -200,6 +206,10 @@ public class PortalActivation {
                     Component.literal("Offerings made").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                     Component.literal(needed + " more " + witnesses + " needed").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
                     10, 80, 20);
+                scheduleChat(p, List.of(
+                    Component.literal("The offerings are made, but " + needed + " more " + witnesses + " needed.")
+                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)
+                ), 110);
             }
         }
         save(level.getServer());
@@ -207,11 +217,23 @@ public class PortalActivation {
     }
 
     public static void tick(MinecraftServer server) {
-        if (activated) return;
-        if (consumed.isEmpty()) return;
-
         ServerLevel level = server.overworld();
         if (level == null) return;
+
+        if (!pendingChats.isEmpty()) {
+            long gameTime = level.getGameTime();
+            Iterator<PendingChat> it = pendingChats.iterator();
+            while (it.hasNext()) {
+                PendingChat pc = it.next();
+                if (gameTime >= pc.fireTick()) {
+                    deliverChat(server, pc);
+                    it.remove();
+                }
+            }
+        }
+
+        if (activated) return;
+        if (consumed.isEmpty()) return;
 
         if (level.getGameTime() - lastConsumeTick > TIMEOUT_TICKS) {
             returnItems(server, level);
@@ -255,6 +277,30 @@ public class PortalActivation {
 
     public static void onPlayerDisconnect(UUID uuid) {
         lastMessageTick.remove(uuid);
+        pendingChats.removeIf(pc -> !pc.broadcast() && pc.playerId().equals(uuid));
+    }
+
+    private static void scheduleChat(ServerPlayer player, List<Component> messages, int delayTicks) {
+        long fireTick = player.level().getGameTime() + delayTicks;
+        pendingChats.add(new PendingChat(player.getUUID(), messages, fireTick, false));
+    }
+
+    private static void scheduleBroadcastChat(ServerLevel level, List<Component> messages, int delayTicks) {
+        long fireTick = level.getGameTime() + delayTicks;
+        pendingChats.add(new PendingChat(null, messages, fireTick, true));
+    }
+
+    private static void deliverChat(MinecraftServer server, PendingChat pc) {
+        if (pc.broadcast()) {
+            for (ServerPlayer p : server.getPlayerList().getPlayers()) {
+                for (Component msg : pc.messages()) p.sendSystemMessage(msg);
+            }
+        } else {
+            ServerPlayer p = server.getPlayerList().getPlayer(pc.playerId());
+            if (p != null) {
+                for (Component msg : pc.messages()) p.sendSystemMessage(msg);
+            }
+        }
     }
 
     private static void returnItems(MinecraftServer server, ServerLevel level) {
@@ -283,9 +329,14 @@ public class PortalActivation {
             .withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
         Component subtitle = Component.literal("Your offerings have been returned")
             .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+        Component chatLine = Component.literal("The portal grew impatient and returned your offerings.")
+            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
         for (UUID uuid : notifiedPlayers) {
             ServerPlayer p = server.getPlayerList().getPlayer(uuid);
-            if (p != null) sendTitle(p, title, subtitle, 10, 80, 20);
+            if (p != null) {
+                sendTitle(p, title, subtitle, 10, 80, 20);
+                scheduleChat(p, List.of(chatLine), 110);
+            }
         }
 
         consumed.clear();
@@ -304,6 +355,10 @@ public class PortalActivation {
         for (ServerPlayer p : level.getServer().getPlayerList().getPlayers()) {
             sendTitle(p, title, subtitle, 20, 140, 40);
         }
+        scheduleBroadcastChat(level, List.of(
+            Component.literal("The End Portal hungers no more. The way is open.")
+                .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD)
+        ), 200);
     }
 
     public static void repelPlayer(ServerPlayer player, BlockPos portalPos) {
@@ -345,6 +400,15 @@ public class PortalActivation {
             .append(Component.literal("and finally a hand held savior").withStyle(ChatFormatting.WHITE));
 
         sendTitle(player, title, subtitle, 10, 140, 30);
+
+        scheduleChat(player, List.of(
+            Component.literal("Collect these items few").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
+            Component.literal("  A Trident from the bubbling undead").withStyle(ChatFormatting.AQUA),
+            Component.literal("  A block of Nether & Gold forged steel").withStyle(ChatFormatting.DARK_PURPLE),
+            Component.literal("  An egg of a beast long past").withStyle(ChatFormatting.GREEN),
+            Component.literal("  An Apple glistening with power").withStyle(ChatFormatting.YELLOW),
+            Component.literal("  and finally a hand held savior").withStyle(ChatFormatting.WHITE)
+        ), 180);
     }
 
     private static void sendTitle(ServerPlayer player, Component title, Component subtitle, int fadeIn, int stay, int fadeOut) {
