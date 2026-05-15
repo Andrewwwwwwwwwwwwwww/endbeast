@@ -65,9 +65,11 @@ public class PortalActivation {
 
     private static final Map<UUID, Long> lastMessageTick = new HashMap<>();
     private static final List<PendingChat> pendingChats = new ArrayList<>();
+    private static final List<PendingTitle> pendingTitles = new ArrayList<>();
     private static Path savePath = null;
 
     private record PendingChat(UUID playerId, List<Component> messages, long fireTick, boolean broadcast) {}
+    private record PendingTitle(UUID playerId, Component title, Component subtitle, int fadeIn, int stay, int fadeOut, long fireTick) {}
 
     public static void setRequiredPlayers(int count) {
         requiredPlayers = Math.max(1, count);
@@ -220,8 +222,23 @@ public class PortalActivation {
         ServerLevel level = server.overworld();
         if (level == null) return;
 
+        long gameTime = level.getGameTime();
+
+        if (!pendingTitles.isEmpty()) {
+            Iterator<PendingTitle> tit = pendingTitles.iterator();
+            while (tit.hasNext()) {
+                PendingTitle pt = tit.next();
+                if (gameTime >= pt.fireTick()) {
+                    ServerPlayer p = server.getPlayerList().getPlayer(pt.playerId());
+                    if (p != null) {
+                        sendTitle(p, pt.title(), pt.subtitle(), pt.fadeIn(), pt.stay(), pt.fadeOut());
+                    }
+                    tit.remove();
+                }
+            }
+        }
+
         if (!pendingChats.isEmpty()) {
-            long gameTime = level.getGameTime();
             Iterator<PendingChat> it = pendingChats.iterator();
             while (it.hasNext()) {
                 PendingChat pc = it.next();
@@ -271,6 +288,7 @@ public class PortalActivation {
         participants.clear();
         consumedBy.clear();
         lastMessageTick.clear();
+        pendingTitles.clear();
         lastPortalPos = null;
         broadcastActivation(level);
     }
@@ -278,6 +296,12 @@ public class PortalActivation {
     public static void onPlayerDisconnect(UUID uuid) {
         lastMessageTick.remove(uuid);
         pendingChats.removeIf(pc -> !pc.broadcast() && pc.playerId().equals(uuid));
+        pendingTitles.removeIf(pt -> pt.playerId().equals(uuid));
+    }
+
+    private static void scheduleTitle(ServerPlayer player, Component title, Component subtitle, int fadeIn, int stay, int fadeOut, int delayTicks) {
+        long fireTick = player.level().getGameTime() + delayTicks;
+        pendingTitles.add(new PendingTitle(player.getUUID(), title, subtitle, fadeIn, stay, fadeOut, fireTick));
     }
 
     private static void scheduleChat(ServerPlayer player, List<Component> messages, int delayTicks) {
@@ -378,37 +402,41 @@ public class PortalActivation {
 
         long now = player.level().getGameTime();
         Long last = lastMessageTick.get(player.getUUID());
-        if (last == null || now - last > 100) {
-            sendRequiredItemsMessage(player);
+        if (last == null || now - last > 300) {
+            showRequirements(player);
             lastMessageTick.put(player.getUUID(), now);
         }
     }
 
-    private static void sendRequiredItemsMessage(ServerPlayer player) {
-        Component title = Component.literal("Collect these items few")
+    public static void showRequirements(ServerPlayer player) {
+        UUID uuid = player.getUUID();
+        pendingTitles.removeIf(pt -> pt.playerId().equals(uuid));
+        pendingChats.removeIf(pc -> !pc.broadcast() && pc.playerId().equals(uuid));
+
+        Component heading = Component.literal("Collect these items few")
             .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
+        Component[] items = new Component[] {
+            Component.literal("A Trident from the bubbling undead").withStyle(ChatFormatting.AQUA),
+            Component.literal("A block of Nether & Gold forged steel").withStyle(ChatFormatting.DARK_PURPLE),
+            Component.literal("An egg of a beast long past").withStyle(ChatFormatting.GREEN),
+            Component.literal("An Apple glistening with power").withStyle(ChatFormatting.YELLOW),
+            Component.literal("and finally a hand held savior").withStyle(ChatFormatting.WHITE)
+        };
 
-        Component subtitle = Component.empty()
-            .append(Component.literal("A Trident from the bubbling undead").withStyle(ChatFormatting.AQUA))
-            .append(Component.literal("\n"))
-            .append(Component.literal("A block of Nether & Gold forged steel").withStyle(ChatFormatting.DARK_PURPLE))
-            .append(Component.literal("\n"))
-            .append(Component.literal("An egg of a beast long past").withStyle(ChatFormatting.GREEN))
-            .append(Component.literal("\n"))
-            .append(Component.literal("An Apple glistening with power").withStyle(ChatFormatting.YELLOW))
-            .append(Component.literal("\n"))
-            .append(Component.literal("and finally a hand held savior").withStyle(ChatFormatting.WHITE));
+        int t = 0;
+        scheduleTitle(player, heading, Component.empty(), 5, 40, 10, t);
+        t += 50;
+        for (Component item : items) {
+            scheduleTitle(player, item, Component.empty(), 5, 30, 5, t);
+            t += 35;
+        }
 
-        sendTitle(player, title, subtitle, 10, 140, 30);
-
-        scheduleChat(player, List.of(
-            Component.literal("Collect these items few").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
-            Component.literal("  A Trident from the bubbling undead").withStyle(ChatFormatting.AQUA),
-            Component.literal("  A block of Nether & Gold forged steel").withStyle(ChatFormatting.DARK_PURPLE),
-            Component.literal("  An egg of a beast long past").withStyle(ChatFormatting.GREEN),
-            Component.literal("  An Apple glistening with power").withStyle(ChatFormatting.YELLOW),
-            Component.literal("  and finally a hand held savior").withStyle(ChatFormatting.WHITE)
-        ), 180);
+        List<Component> chatLines = new ArrayList<>();
+        chatLines.add(heading);
+        for (Component item : items) {
+            chatLines.add(Component.literal("  ").append(item));
+        }
+        scheduleChat(player, chatLines, t);
     }
 
     private static void sendTitle(ServerPlayer player, Component title, Component subtitle, int fadeIn, int stay, int fadeOut) {

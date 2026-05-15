@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 
 public class EndBeast implements ModInitializer {
     public static final String MOD_ID = "endbeast";
@@ -23,8 +24,8 @@ public class EndBeast implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
             dispatcher.register(
                 Commands.literal("EndBeast")
-                    .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                     .then(Commands.literal("setendplayercount")
+                        .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.argument("count", IntegerArgumentType.integer(1))
                             .executes(ctx -> {
                                 int count = IntegerArgumentType.getInteger(ctx, "count");
@@ -34,6 +35,15 @@ public class EndBeast implements ModInitializer {
                                     "End Portal player requirement set to " + count), true);
                                 return 1;
                             })))
+                    .then(Commands.literal("portalreq")
+                        .executes(ctx -> {
+                            if (ctx.getSource().getEntity() instanceof ServerPlayer player) {
+                                PortalActivation.showRequirements(player);
+                                return 1;
+                            }
+                            ctx.getSource().sendFailure(Component.literal("This command must be run by a player."));
+                            return 0;
+                        }))
             )
         );
     }
