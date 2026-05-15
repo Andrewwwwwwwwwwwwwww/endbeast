@@ -8,6 +8,9 @@ import com.google.gson.JsonParser;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -193,9 +196,10 @@ public class PortalActivation {
             if (p != null) {
                 int needed = required - participants.size();
                 String witnesses = needed == 1 ? "witness" : "witnesses";
-                p.sendSystemMessage(
-                    Component.literal("The offerings are made, but " + needed + " more " + witnesses + " needed.")
-                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+                sendTitle(p,
+                    Component.literal("Offerings made").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
+                    Component.literal(needed + " more " + witnesses + " needed").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC),
+                    10, 80, 20);
             }
         }
         save(level.getServer());
@@ -275,11 +279,13 @@ public class PortalActivation {
             }
         }
 
-        Component msg = Component.literal("The portal grew impatient and returned your offerings.")
+        Component title = Component.literal("The portal grew impatient")
+            .withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
+        Component subtitle = Component.literal("Your offerings have been returned")
             .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
         for (UUID uuid : notifiedPlayers) {
             ServerPlayer p = server.getPlayerList().getPlayer(uuid);
-            if (p != null) p.sendSystemMessage(msg);
+            if (p != null) sendTitle(p, title, subtitle, 10, 80, 20);
         }
 
         consumed.clear();
@@ -291,10 +297,12 @@ public class PortalActivation {
     }
 
     private static void broadcastActivation(ServerLevel level) {
-        Component msg = Component.literal("The End Portal hungers no more. The way is open.")
+        Component title = Component.literal("The End Portal hungers no more")
             .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD);
+        Component subtitle = Component.literal("The way is open")
+            .withStyle(ChatFormatting.LIGHT_PURPLE);
         for (ServerPlayer p : level.getServer().getPlayerList().getPlayers()) {
-            p.sendSystemMessage(msg);
+            sendTitle(p, title, subtitle, 20, 140, 40);
         }
     }
 
@@ -322,15 +330,28 @@ public class PortalActivation {
     }
 
     private static void sendRequiredItemsMessage(ServerPlayer player) {
-        send(player, "Collect these items few", ChatFormatting.GOLD, ChatFormatting.BOLD);
-        send(player, "  A Trident from the bubbling undead", ChatFormatting.AQUA);
-        send(player, "  A block of Nether & Gold forged steel", ChatFormatting.DARK_PURPLE);
-        send(player, "  An egg of a beast long past", ChatFormatting.GREEN);
-        send(player, "  An Apple glistening with power", ChatFormatting.YELLOW);
-        send(player, "  and finally a hand held savior", ChatFormatting.WHITE);
+        Component title = Component.literal("Collect these items few")
+            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
+
+        Component subtitle = Component.empty()
+            .append(Component.literal("A Trident from the bubbling undead").withStyle(ChatFormatting.AQUA))
+            .append(Component.literal("\n"))
+            .append(Component.literal("A block of Nether & Gold forged steel").withStyle(ChatFormatting.DARK_PURPLE))
+            .append(Component.literal("\n"))
+            .append(Component.literal("An egg of a beast long past").withStyle(ChatFormatting.GREEN))
+            .append(Component.literal("\n"))
+            .append(Component.literal("An Apple glistening with power").withStyle(ChatFormatting.YELLOW))
+            .append(Component.literal("\n"))
+            .append(Component.literal("and finally a hand held savior").withStyle(ChatFormatting.WHITE));
+
+        sendTitle(player, title, subtitle, 10, 140, 30);
     }
 
-    private static void send(ServerPlayer player, String text, ChatFormatting... styles) {
-        player.sendSystemMessage(Component.literal(text).withStyle(styles));
+    private static void sendTitle(ServerPlayer player, Component title, Component subtitle, int fadeIn, int stay, int fadeOut) {
+        player.connection.send(new ClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut));
+        if (subtitle != null) {
+            player.connection.send(new ClientboundSetSubtitleTextPacket(subtitle));
+        }
+        player.connection.send(new ClientboundSetTitleTextPacket(title));
     }
 }
