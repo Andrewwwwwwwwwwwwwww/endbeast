@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EndPortalBlockMixin {
 
     @Inject(method = "entityInside", at = @At("HEAD"), cancellable = true)
-    private void endbeast$onEntityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier applier, CallbackInfo ci) {
+    private void endbeast$onEntityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier applier, boolean unused, CallbackInfo ci) {
         if (!(level instanceof ServerLevel serverLevel)) return;
         if (!serverLevel.dimension().equals(Level.OVERWORLD)) return;
 
