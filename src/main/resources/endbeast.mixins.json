@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.example.endbeast.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "EndPortalBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

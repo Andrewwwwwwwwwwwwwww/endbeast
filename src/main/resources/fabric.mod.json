@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "endbeast",
+  "version": "${version}",
+  "name": "EndBeast",
+  "description": "End Portals light up when filled with eyes but require sacrificial items to truly activate.",
+  "authors": ["Andrewwwwwwwwwwwwwww"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.example.endbeast.EndBeast"]
+  },
+  "mixins": ["endbeast.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.19.2",
+    "fabric-api": "*",
+    "minecraft": "~26.1"
+  }
+}
