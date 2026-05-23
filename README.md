@@ -6,12 +6,17 @@ A Fabric mod that gates the End Portal behind a ritual: even when the frame is l
 
 1. Players light an End Portal frame normally with 12 eyes of ender — the portal blocks appear lit.
 2. Anyone who tries to walk in is **launched away** and shown the required offerings on screen.
-3. Players must throw five specific items into the lit portal:
+3. Players must throw ten specific items into the lit portal:
    - **A Trident from the bubbling undead** — Trident
    - **A block of Nether & Gold forged steel** — Netherite Block
    - **An egg of a beast long past** — Sniffer Egg
    - **An Apple glistening with power** — Enchanted Golden Apple
    - **A hand held savior** — Totem of Undying
+   - **A Nether Star's gilded prison** — Beacon
+   - **A mace of crushing weight** — Mace
+   - **A compass for the fallen** — Recovery Compass
+   - **A disc of porcine percussion** — Pigstep Music Disc
+   - **A skull from the restless dead** — Zombie Head
 4. By default at least **3 players** must have participated (thrown an offering or stood within 16 blocks of the portal during an offering).
 5. If 60 seconds pass between offerings, the portal "loses patience" and returns all thrown items to whoever threw them.
 6. Once activated, the change is **world-wide** — every End Portal works normally from then on.

@@ -49,8 +49,13 @@ public class PortalActivation {
         ITEM_TO_ID.put(Items.TRIDENT, "trident");
         ITEM_TO_ID.put(Items.NETHERITE_BLOCK, "netherite_block");
         ITEM_TO_ID.put(Items.SNIFFER_EGG, "sniffer_egg");
-        ITEM_TO_ID.put(Items.TOTEM_OF_UNDYING, "totem_of_undying");
         ITEM_TO_ID.put(Items.ENCHANTED_GOLDEN_APPLE, "enchanted_golden_apple");
+        ITEM_TO_ID.put(Items.TOTEM_OF_UNDYING, "totem_of_undying");
+        ITEM_TO_ID.put(Items.BEACON, "beacon");
+        ITEM_TO_ID.put(Items.MACE, "mace");
+        ITEM_TO_ID.put(Items.RECOVERY_COMPASS, "recovery_compass");
+        ITEM_TO_ID.put(Items.MUSIC_DISC_PIGSTEP, "music_disc_pigstep");
+        ITEM_TO_ID.put(Items.ZOMBIE_HEAD, "zombie_head");
         for (Map.Entry<Item, String> e : ITEM_TO_ID.entrySet()) {
             ID_TO_ITEM.put(e.getValue(), e.getKey());
         }
@@ -426,14 +431,22 @@ public class PortalActivation {
             Component.literal("A block of Nether & Gold forged steel").withStyle(ChatFormatting.DARK_PURPLE),
             Component.literal("An egg of a beast long past").withStyle(ChatFormatting.GREEN),
             Component.literal("An Apple glistening with power").withStyle(ChatFormatting.YELLOW),
-            Component.literal("and finally a hand held savior").withStyle(ChatFormatting.WHITE)
+            Component.literal("A hand held savior").withStyle(ChatFormatting.WHITE),
+            Component.literal("A Nether Star's gilded prison").withStyle(ChatFormatting.GOLD),
+            Component.literal("A mace of crushing weight").withStyle(ChatFormatting.GRAY),
+            Component.literal("A compass for the fallen").withStyle(ChatFormatting.RED),
+            Component.literal("A disc of porcine percussion").withStyle(ChatFormatting.LIGHT_PURPLE),
+            Component.literal("and finally a skull from the restless dead").withStyle(ChatFormatting.DARK_GREEN)
         };
 
         int t = 0;
         scheduleTitle(player, heading, Component.empty(), 5, 40, 10, t);
         t += 50;
-        for (Component item : items) {
-            scheduleTitle(player, item, Component.empty(), 5, 30, 5, t);
+        int total = items.length;
+        for (int i = 0; i < items.length; i++) {
+            Component offeringTitle = Component.literal("Offering " + (i + 1) + " of " + total)
+                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
+            scheduleTitle(player, offeringTitle, items[i], 5, 30, 5, t);
             t += 35;
         }
 
@@ -442,6 +455,10 @@ public class PortalActivation {
         for (Component item : items) {
             chatLines.add(Component.literal("  ").append(item));
         }
+        int required = getRequiredPlayers();
+        String witnesses = required == 1 ? "witness" : "witnesses";
+        chatLines.add(Component.literal(required + " " + witnesses + " required to activate the portal")
+            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
         scheduleChat(player, chatLines, t);
     }
 
