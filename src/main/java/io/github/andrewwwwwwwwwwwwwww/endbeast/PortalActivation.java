@@ -83,6 +83,10 @@ public class PortalActivation {
         requiredPlayers = Math.max(1, count);
     }
 
+    public static int getRequiredPlayersValue() {
+        return Math.max(1, requiredPlayers);
+    }
+
     public static boolean isActivated(ServerLevel level) {
         return activated;
     }

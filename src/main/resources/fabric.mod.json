@@ -3,12 +3,13 @@
   "id": "endbeast",
   "version": "${version}",
   "name": "EndBeast",
-  "description": "End Portals light up when filled with eyes of ender but require five sacrificial offerings (and multiple witnesses) before they will let you pass.",
+  "description": "End Portals light up when filled with eyes of ender but require ten sacrificial offerings (and multiple witnesses) before they will let you pass.",
   "authors": ["Andrewwwwwwwwwwwwwww"],
   "license": "MIT",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
-    "main": ["io.github.andrewwwwwwwwwwwwwww.endbeast.EndBeast"]
+    "main": ["io.github.andrewwwwwwwwwwwwwww.endbeast.EndBeast"],
+    "modmenu": ["io.github.andrewwwwwwwwwwwwwww.endbeast.client.ModMenuIntegration"]
   },
   "mixins": ["endbeast.mixins.json"],
   "contact": {
@@ -21,5 +22,8 @@
     "fabricloader": ">=0.19.2",
     "fabric-api": ">=0.148.2",
     "minecraft": "~26.1"
+  },
+  "recommends": {
+    "modmenu": "*"
   }
 }
