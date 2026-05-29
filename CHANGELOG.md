@@ -7,6 +7,23 @@
 
 ---
 
+## [1.2.1] - 2026-05-28
+
+### Added
+- Mod Menu integration — players can configure the required participant count via the in-game mod list without using commands. Multiplayer clients see a read-only screen with the relevant commands instead.
+- Icon updated to 400×400 RGBA PNG for CurseForge logo compatibility.
+
+---
+
+## [1.2.0] - 2026-05-27
+
+### Added
+- Five new required offerings: Beacon, Mace, Recovery Compass, Pigstep Music Disc, Zombie Head — bringing the total to ten items.
+- Player-count requirement line added to the chat backup that fires after the on-screen slideshow, so witnesses needed is always visible in the chat history.
+- Title/subtitle display now adapts to GUI scale — large titles use a subtitle line instead of cramming text into the title, preventing overflow at GUI scale 3+.
+
+---
+
 ## [1.1.1] - 2026-05-15
 
 ### Fixed
@@ -15,7 +32,6 @@
 - Memory leak: `pendingChats`, `pendingTitles`, and `lastMessageTick` are now cleared when the server reloads, preventing stale UI state from carrying over in development environments.
 
 ### Changed
-- `environment` changed from `"*"` to `"server"` — EndBeast is purely server-side; players do not need it installed on their client.
 - Fabric Loom pinned to `1.16.2` (stable) — was previously on `1.16-SNAPSHOT`.
 - Fabric API dependency tightened to `>=0.148.2` instead of the wildcard `*`.
 
