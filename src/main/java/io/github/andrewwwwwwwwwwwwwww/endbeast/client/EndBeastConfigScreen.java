@@ -35,10 +35,10 @@ public class EndBeastConfigScreen extends Screen {
                 Component.literal("Use these commands (op required):")
                     .withStyle(ChatFormatting.GRAY), this.font));
             addRenderableWidget(new StringWidget(0, 104, this.width, 12,
-                Component.literal("/EndBeast portalreq")
+                Component.literal("/endbeast portalreq")
                     .withStyle(ChatFormatting.AQUA), this.font));
             addRenderableWidget(new StringWidget(0, 120, this.width, 12,
-                Component.literal("/EndBeast setendplayercount <n>")
+                Component.literal("/endbeast setendplayercount <n>")
                     .withStyle(ChatFormatting.AQUA), this.font));
 
             addRenderableWidget(Button.builder(

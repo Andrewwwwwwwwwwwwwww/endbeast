@@ -1,5 +1,12 @@
 # EndBeast Changelog
 
+## [1.2.2] - 2026-05-28
+
+### Fixed
+- Mod Menu config screen and README referenced the command as `/EndBeast`; corrected to `/endbeast` to match the case-sensitive Brigadier registration.
+
+---
+
 ## [1.1.1] - 2026-05-15
 
 ### Fixed
