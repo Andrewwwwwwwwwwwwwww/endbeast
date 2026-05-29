@@ -1,5 +1,12 @@
 # EndBeast Changelog
 
+## [1.2.3] - 2026-05-29
+
+### Changed
+- Chat requirement list now appends the actual item name in parentheses after each poetic clue, e.g. `A hand held savior (Totem of Undying)`, making it immediately clear what to collect.
+
+---
+
 ## [1.2.2] - 2026-05-28
 
 ### Fixed

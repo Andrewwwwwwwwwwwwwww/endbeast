@@ -442,6 +442,11 @@ public class PortalActivation {
             Component.literal("A disc of porcine percussion").withStyle(ChatFormatting.LIGHT_PURPLE),
             Component.literal("and finally a skull from the restless dead").withStyle(ChatFormatting.DARK_GREEN)
         };
+        String[] itemNames = new String[] {
+            "Trident", "Netherite Block", "Sniffer Egg", "Enchanted Golden Apple",
+            "Totem of Undying", "Beacon", "Mace", "Recovery Compass",
+            "Pigstep Music Disc", "Zombie Head"
+        };
 
         int t = 0;
         scheduleTitle(player, heading, Component.empty(), 5, 40, 10, t);
@@ -456,8 +461,9 @@ public class PortalActivation {
 
         List<Component> chatLines = new ArrayList<>();
         chatLines.add(heading);
-        for (Component item : items) {
-            chatLines.add(Component.literal("  ").append(item));
+        for (int i = 0; i < items.length; i++) {
+            chatLines.add(Component.literal("  ").append(items[i])
+                .append(Component.literal(" (" + itemNames[i] + ")").withStyle(ChatFormatting.WHITE)));
         }
         int required = getRequiredPlayers();
         String witnesses = required == 1 ? "witness" : "witnesses";
