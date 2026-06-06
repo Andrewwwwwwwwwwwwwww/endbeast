@@ -44,6 +44,14 @@ public class EndBeast implements ModInitializer {
                             ctx.getSource().sendFailure(Component.literal("This command must be run by a player."));
                             return 0;
                         }))
+                    .then(Commands.literal("reset")
+                        .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(ctx -> {
+                            PortalActivation.reset(ctx.getSource().getServer());
+                            ctx.getSource().sendSuccess(() -> Component.literal(
+                                "The End Portal has been re-locked; the ritual is required again."), true);
+                            return 1;
+                        }))
             )
         );
     }

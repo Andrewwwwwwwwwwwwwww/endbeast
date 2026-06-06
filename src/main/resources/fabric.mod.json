@@ -5,7 +5,7 @@
   "name": "EndBeast",
   "description": "End Portals light up when filled with eyes of ender but require ten sacrificial offerings (and multiple witnesses) before they will let you pass.",
   "authors": ["Andrewwwwwwwwwwwwwww"],
-  "license": "MIT",
+  "license": "All Rights Reserved",
   "environment": "*",
   "entrypoints": {
     "main": ["io.github.andrewwwwwwwwwwwwwww.endbeast.EndBeast"],

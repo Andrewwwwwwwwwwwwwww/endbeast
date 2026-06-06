@@ -37,4 +37,4 @@ A Fabric mod that gates the End Portal behind a ritual: even when the frame is l
 
 ## License
 
-MIT
+All Rights Reserved. See the [LICENSE](LICENSE) file — these mods are proprietary.

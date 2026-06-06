@@ -308,6 +308,31 @@ public class PortalActivation {
         broadcastActivation(level);
     }
 
+    /**
+     * Re-locks the End Portal: clears activation and all in-progress ritual state, so the portal
+     * once again requires the full ritual to open. Any offerings mid-ritual are NOT returned.
+     */
+    public static void reset(MinecraftServer server) {
+        activated = false;
+        consumed.clear();
+        consumedBy.clear();
+        participants.clear();
+        lastConsumeTick = 0L;
+        lastPortalPos = null;
+        lastMessageTick.clear();
+        pendingTitles.clear();
+        pendingChats.clear();
+        save(server);
+
+        Component title = Component.literal("The End Portal hungers once more")
+            .withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD);
+        Component subtitle = Component.literal("The way is sealed")
+            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+        for (ServerPlayer p : server.getPlayerList().getPlayers()) {
+            sendTitle(p, title, subtitle, 20, 120, 40);
+        }
+    }
+
     public static void onPlayerDisconnect(UUID uuid) {
         lastMessageTick.remove(uuid);
         pendingChats.removeIf(pc -> !pc.broadcast() && pc.playerId().equals(uuid));
