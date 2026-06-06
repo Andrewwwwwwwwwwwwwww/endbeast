@@ -3,7 +3,7 @@
   "id": "endbeast",
   "version": "${version}",
   "name": "EndBeast",
-  "description": "End Portals light up when filled with eyes of ender but require ten sacrificial offerings (and multiple witnesses) before they will let you pass.",
+  "description": "Gates the End Portal behind a ritual: a built End Portal won't let anyone pass until ten specific offerings are thrown in with enough player witnesses present. Server-side, with cryptic in-game clues; ops can re-lock it with /endbeast reset.",
   "authors": ["Andrewwwwwwwwwwwwwww"],
   "license": "All Rights Reserved",
   "environment": "*",
