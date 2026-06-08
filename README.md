@@ -28,6 +28,7 @@ A Fabric mod that gates the End Portal behind a ritual: even when the frame is l
 | --- | --- | --- |
 | `/endbeast portalreq` | Anyone | Show the portal requirements on screen and in chat. |
 | `/endbeast setendplayercount <n>` | Op (2+) | Change the minimum participant count. Use `1` for singleplayer. |
+| `/endbeast reset` | Op (2+) | Re-lock the End Portal so the full ritual is required again. Clears the activated state and any in-progress offerings. |
 
 ## Installation
 
