@@ -1,4 +1,14 @@
-# EndBeast Changelog
+# The Hungering Portal Changelog
+
+## [1.4.0] - 2026-06-09
+
+### Changed
+- **Rebranded EndBeast → "The Hungering Portal".** The mod name (and Mod Menu entry), the mod id
+  (`endbeast` → `thp`), and the jar filename (`thp-x.x.x.jar`) all use the new name. The command is
+  now **`/thp`** (subcommands unchanged: `portalreq`, `setendplayercount`, `reset`).
+- **`/endbeast` still works** as a backwards-compatible alias.
+- In-game ritual flavor text ("The End Portal hungers…") is intentionally unchanged. Existing world
+  state in `<world>/endbeast.json` is preserved (the save filename is kept for continuity).
 
 ## [1.3.0] - 2026-06-04
 

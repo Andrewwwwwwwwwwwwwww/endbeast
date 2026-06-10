@@ -1,4 +1,4 @@
-package io.github.andrewwwwwwwwwwwwwww.endbeast;
+package io.github.andrewwwwwwwwwwwwwww.thp;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -38,7 +38,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class PortalActivation {
-    private static final Logger LOGGER = LoggerFactory.getLogger("EndBeast");
+    private static final Logger LOGGER = LoggerFactory.getLogger("The Hungering Portal");
     private static final com.google.gson.Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final long TIMEOUT_TICKS = 20L * 60L;
     private static final double NEARBY_RADIUS = 16.0;

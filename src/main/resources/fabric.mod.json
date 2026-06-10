@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "id": "endbeast",
+  "id": "thp",
   "version": "${version}",
-  "name": "EndBeast",
-  "description": "Gates the End Portal behind a ritual: a built End Portal won't let anyone pass until ten specific offerings are thrown in with enough player witnesses present. Server-side, with cryptic in-game clues; ops can re-lock it with /endbeast reset.",
+  "name": "The Hungering Portal",
+  "description": "Gates the End Portal behind a ritual: a built End Portal won't let anyone pass until ten specific offerings are thrown in with enough player witnesses present. Server-side, with cryptic in-game clues; ops can re-lock it with /thp reset.",
   "authors": ["Andrewwwwwwwwwwwwwww"],
   "license": "All Rights Reserved",
   "environment": "*",
   "entrypoints": {
-    "main": ["io.github.andrewwwwwwwwwwwwwww.endbeast.EndBeast"],
-    "modmenu": ["io.github.andrewwwwwwwwwwwwwww.endbeast.client.ModMenuIntegration"]
+    "main": ["io.github.andrewwwwwwwwwwwwwww.thp.TheHungeringPortal"],
+    "modmenu": ["io.github.andrewwwwwwwwwwwwwww.thp.client.ModMenuIntegration"]
   },
-  "mixins": ["endbeast.mixins.json"],
+  "mixins": ["thp.mixins.json"],
   "contact": {
-    "homepage": "https://github.com/Andrewwwwwwwwwwwwwww/endbeast",
-    "sources": "https://github.com/Andrewwwwwwwwwwwwwww/endbeast",
-    "issues": "https://github.com/Andrewwwwwwwwwwwwwww/endbeast/issues"
+    "homepage": "https://github.com/Andrewwwwwwwwwwwwwww/thp",
+    "sources": "https://github.com/Andrewwwwwwwwwwwwwww/thp",
+    "issues": "https://github.com/Andrewwwwwwwwwwwwwww/thp/issues"
   },
-  "icon": "assets/endbeast/icon.png",
+  "icon": "assets/thp/icon.png",
   "depends": {
     "fabricloader": ">=0.19.2",
     "fabric-api": ">=0.148.2",

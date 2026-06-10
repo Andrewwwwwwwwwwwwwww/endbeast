@@ -1,6 +1,6 @@
-package io.github.andrewwwwwwwwwwwwwww.endbeast.mixin;
+package io.github.andrewwwwwwwwwwwwwww.thp.mixin;
 
-import io.github.andrewwwwwwwwwwwwwww.endbeast.PortalActivation;
+import io.github.andrewwwwwwwwwwwwwww.thp.PortalActivation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class EndPortalBlockMixin {
 
     @Inject(method = "entityInside", at = @At("HEAD"), cancellable = true)
-    private void endbeast$onEntityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier applier, boolean unused, CallbackInfo ci) {
+    private void thp$onEntityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier applier, boolean unused, CallbackInfo ci) {
         if (!(level instanceof ServerLevel serverLevel)) return;
         if (!serverLevel.dimension().equals(Level.OVERWORLD)) return;
 

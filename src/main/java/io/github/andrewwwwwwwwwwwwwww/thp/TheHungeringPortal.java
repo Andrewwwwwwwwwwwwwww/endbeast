@@ -1,17 +1,19 @@
-package io.github.andrewwwwwwwwwwwwwww.endbeast;
+package io.github.andrewwwwwwwwwwwwwww.thp;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-public class EndBeast implements ModInitializer {
-    public static final String MOD_ID = "endbeast";
+public class TheHungeringPortal implements ModInitializer {
+    public static final String MOD_ID = "thp";
 
     @Override
     public void onInitialize() {
@@ -21,9 +23,9 @@ public class EndBeast implements ModInitializer {
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) ->
             PortalActivation.onPlayerDisconnect(handler.player.getUUID()));
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
-            dispatcher.register(
-                Commands.literal("endbeast")
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            LiteralCommandNode<CommandSourceStack> thp = dispatcher.register(
+                Commands.literal("thp")
                     .then(Commands.literal("setendplayercount")
                         .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .then(Commands.argument("count", IntegerArgumentType.integer(1))
@@ -52,7 +54,9 @@ public class EndBeast implements ModInitializer {
                                 "The End Portal has been re-locked; the ritual is required again."), true);
                             return 1;
                         }))
-            )
-        );
+            );
+            // Backwards-compatible alias so old /endbeast usages still work.
+            dispatcher.register(Commands.literal("endbeast").redirect(thp));
+        });
     }
 }

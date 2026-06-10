@@ -1,6 +1,6 @@
-package io.github.andrewwwwwwwwwwwwwww.endbeast.client;
+package io.github.andrewwwwwwwwwwwwwww.thp.client;
 
-import io.github.andrewwwwwwwwwwwwwww.endbeast.PortalActivation;
+import io.github.andrewwwwwwwwwwwwwww.thp.PortalActivation;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -10,13 +10,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 
-public class EndBeastConfigScreen extends Screen {
+public class ThpConfigScreen extends Screen {
     private final Screen parent;
     private final boolean remoteServer;
     private EditBox playersField;
 
-    public EndBeastConfigScreen(Screen parent) {
-        super(Component.literal("EndBeast"));
+    public ThpConfigScreen(Screen parent) {
+        super(Component.literal("The Hungering Portal"));
         this.parent = parent;
         this.remoteServer = Minecraft.getInstance().getCurrentServer() != null;
     }
@@ -35,10 +35,10 @@ public class EndBeastConfigScreen extends Screen {
                 Component.literal("Use these commands (op required):")
                     .withStyle(ChatFormatting.GRAY), this.font));
             addRenderableWidget(new StringWidget(0, 104, this.width, 12,
-                Component.literal("/endbeast portalreq")
+                Component.literal("/thp portalreq")
                     .withStyle(ChatFormatting.AQUA), this.font));
             addRenderableWidget(new StringWidget(0, 120, this.width, 12,
-                Component.literal("/endbeast setendplayercount <n>")
+                Component.literal("/thp setendplayercount <n>")
                     .withStyle(ChatFormatting.AQUA), this.font));
 
             addRenderableWidget(Button.builder(

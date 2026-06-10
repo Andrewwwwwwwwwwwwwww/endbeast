@@ -1,4 +1,4 @@
-# EndBeast
+# The Hungering Portal
 
 A Fabric mod that gates the End Portal behind a ritual: even when the frame is lit with eyes of ender, the portal won't take anyone until specific offerings are thrown in and a minimum number of witnesses are present.
 
@@ -26,14 +26,16 @@ A Fabric mod that gates the End Portal behind a ritual: even when the frame is l
 
 | Command | Permission | Description |
 | --- | --- | --- |
-| `/endbeast portalreq` | Anyone | Show the portal requirements on screen and in chat. |
-| `/endbeast setendplayercount <n>` | Op (2+) | Change the minimum participant count. Use `1` for singleplayer. |
-| `/endbeast reset` | Op (2+) | Re-lock the End Portal so the full ritual is required again. Clears the activated state and any in-progress offerings. |
+| `/thp portalreq` | Anyone | Show the portal requirements on screen and in chat. |
+| `/thp setendplayercount <n>` | Op (2+) | Change the minimum participant count. Use `1` for singleplayer. |
+| `/thp reset` | Op (2+) | Re-lock the End Portal so the full ritual is required again. Clears the activated state and any in-progress offerings. |
+
+> `/endbeast` still works as an alias for `/thp` (backwards compatibility).
 
 ## Installation
 
 1. Install [Fabric Loader](https://fabricmc.net/use/) and [Fabric API](https://modrinth.com/mod/fabric-api).
-2. Drop the EndBeast JAR into your `mods` folder.
+2. Drop the The Hungering Portal (`thp`) JAR into your `mods` folder.
 3. Start the server. State is saved in `<world>/endbeast.json`.
 
 ## License
